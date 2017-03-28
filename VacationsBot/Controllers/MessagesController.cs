@@ -20,7 +20,7 @@ namespace VacationsBot
             {
                 if (activity.ChannelId.ToLower() == "skype")
                 {
-                    await Conversation.SendAsync(activity, () => new Dialogs.SkypeDialog());
+                    await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
                 }
                 else
                 {
