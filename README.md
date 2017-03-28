@@ -1,5 +1,7 @@
-# VacationsBot
+﻿# VacationsBot
 Azure Bot Service and Bot Framework bot for requesting vacations
+
+https://join.skype.com/bot/8c1e31c9-ef5a-4ffd-bb14-d8e304c03313?add
 
 CONVERSATION WITH EMPLOYEE  Bot receives conversation from employee
 -	Shaer: Hello!
