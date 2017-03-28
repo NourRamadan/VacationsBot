@@ -10,22 +10,53 @@ namespace VacationsBot.Dialogs
     {
         public Task StartAsync(IDialogContext context)
         {
-            context.Wait(MessageReceivedAsync);
+            context.Wait(MessageReceived);
 
             return Task.CompletedTask;
         }
 
-        private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
+        private async Task MessageReceived(IDialogContext context, IAwaitable<object> result)
+        {
+            if (context.UserData.ContainsKey("name"))
+            {
+                await context.PostAsync($"Hello, {context.UserData.Get<string>("name")}. Would you like to request a vacation?");
+                context.Wait(VacationRequestIntended);
+            }
+            else
+            {
+                await context.PostAsync($"Hello. What's your name?");
+                context.Wait(NameEntered);
+            }                      
+        }
+
+        private async Task NameEntered(IDialogContext context, IAwaitable<object> result)
+        {
+            var activity = await result as Activity;            
+            context.UserData.SetValue("name",activity.Text);
+            await context.PostAsync($"Hello, {context.UserData.Get<string>("name")}. Would you like to request a vacation?");
+            context.Wait(VacationRequestIntended);
+        }
+
+        private async Task VacationRequestIntended(IDialogContext context, IAwaitable<object> result)
         {
             var activity = await result as Activity;
+            if (activity.Text.ToLower() == "yes" || activity.Text.ToLower() == "y")
+            {
+                await context.PostAsync($"Great! When would you like your vacation to start?");
+                context.Wait(VacationStartSelected);
+            }
+            else
+            {                
+                await context.PostAsync($"Ok {context.UserData.Get<string>("name")}. Let me know if you change your mind.");
+                context.Wait(MessageReceived);                
+            }
+        }
 
-            // calculate something for us to return
-            int length = (activity.Text ?? string.Empty).Length;
-
-            // return our reply to the user
-            await context.PostAsync($"You sent {activity.Text} which was {length} characters");
-
-            context.Wait(MessageReceivedAsync);
+        private async Task VacationStartSelected(IDialogContext context, IAwaitable<object> result)
+        {
+            var activity = await result as Activity;
+            context.UserData.RemoveValue("name");
+            context.Wait(MessageReceived);
         }
     }
 }
