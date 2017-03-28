@@ -18,15 +18,17 @@ namespace VacationsBot
         {
             if (activity.Type == ActivityTypes.Message)
             {
-                if (activity.ChannelId.ToLower() == "skype")
-                {
-                    await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
-                }
-                else
-                {
-                    await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
+                await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
 
-                }
+                //if (activity.ChannelId.ToLower() == "skype")
+                //{
+                //    await Conversation.SendAsync(activity, () => new Dialogs.SkypeDialog());
+                //}
+                //else
+                //{
+                //    await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
+
+                //}
             }
             else
             {
